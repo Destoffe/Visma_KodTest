@@ -1,0 +1,71 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:bind="http://schemas.android.com/apk/res-auto">
+
+    <data>
+        <variable
+            name="weather"
+            type="com.stoffe.visma.models.Weather" />
+    </data>
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="horizontal"
+        android:gravity="center"
+        android:background="@drawable/main_header_selector"
+        android:padding="10dp">
+
+        <ImageView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerHorizontal="true"
+            android:layout_centerInParent="false"
+            android:src="@drawable/logo"
+            android:id="@+id/logo"
+            />
+
+        <ImageButton
+            android:id="@+id/viewBtn"
+            android:layout_width="56dp"
+            android:layout_height="50dp"
+            android:layout_alignTop="@+id/editCountry"
+            android:layout_alignParentRight="true"
+            android:layout_toRightOf="@+id/editCountry"
+            android:background="@drawable/rounded_button"
+            android:textColor="#f1f1f6"
+            android:src="@drawable/transparent_arrow"
+            android:scaleType="fitCenter"
+            android:layout_marginLeft="2dp"
+            />
+
+        <EditText
+            android:id="@+id/editCountry"
+            android:layout_width="337dp"
+            android:layout_height="50dp"
+            android:layout_below="@+id/logo"
+            android:layout_marginTop="20dp"
+            android:background="@drawable/rounded_edit_text"
+            android:hint="ENTER CITY NAME"
+            android:textColor="#92c83f"
+            android:textColorHint="#92c83f"
+            android:textSize="15dp"
+            android:paddingLeft="15dp"
+            android:maxLines="1"
+            android:inputType="text"
+            />
+
+        <Button
+            android:id="@+id/historyBtn"
+            android:layout_width="170dp"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/viewBtn"
+            android:layout_alignParentLeft="false"
+            android:layout_centerInParent="true"
+            android:layout_marginTop="15dp"
+            android:background="@drawable/rounded_history_button"
+            android:text="View History"
+            android:textColor="#FFFFFF"
+            android:textAlignment="center" />
+    </RelativeLayout>
+</layout>

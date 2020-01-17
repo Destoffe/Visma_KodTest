@@ -1,0 +1,109 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:bind="http://schemas.android.com/apk/res-auto">
+
+    <data>
+        <variable
+            name="weather"
+            type="com.stoffe.visma.models.Weather" />
+    </data>
+
+    <RelativeLayout
+        android:background="@drawable/main_header_selector"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="horizontal"
+        android:padding="10dp">
+
+        <ImageButton
+            android:id="@+id/viewBtn"
+            android:layout_width="56dp"
+            android:layout_height="50dp"
+            android:background="@null"
+            android:rotationY="180"
+            android:scaleType="fitCenter"
+            android:src="@drawable/arrow"
+            android:textColor="#f1f1f6" />
+
+        <RelativeLayout
+            android:layout_width="295dp"
+            android:layout_height="123dp"
+            android:layout_centerHorizontal="true"
+            android:layout_marginTop="200dp"
+            android:background="@drawable/rounded_history_button"
+            android:orientation="horizontal"
+            android:paddingLeft="5dp"
+            android:paddingTop="10dp"
+            android:id="@+id/relativeBox">
+
+
+            <ImageView
+                android:id="@+id/weatherImg"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                bind:imageBitmap="@{weather.bitmap}" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="50dp"
+                android:layout_alignParentBottom="true"
+                android:layout_marginStart="0dp"
+                android:layout_marginBottom="83dp"
+                android:textColor="#FFFFFF"
+                android:layout_toRightOf="@+id/weatherImg"
+                android:text="@{weather.currentCondition.getDescr()}" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_centerInParent="true"
+                android:text="@{String.valueOf(weather.currentCondition.getTemp()) +@string/celciusIcon}"
+                android:textColor="#FFFFFF"
+                android:textSize="60dp"
+                android:id="@+id/celciusTxt"/>
+
+            <TextView
+                android:id="@+id/cityText"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_below="@+id/celciusTxt"
+                android:layout_alignParentStart="true"
+                android:layout_marginStart="6dp"
+                android:layout_marginTop="-10dp"
+                android:paddingLeft="5dp"
+                android:text="@{weather.loc.getCity()}"
+                android:textColor="#FFFFFF"
+                android:textSize="20dp" />
+
+            <TextView
+                android:id="@+id/dayTxt"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_below="@+id/celciusTxt"
+                android:layout_alignParentBottom="true"
+                android:layout_marginTop="-30dp"
+                android:layout_alignParentRight="true"
+                android:paddingRight="20dp"
+                android:text="@{weather.currentCondition.day}"
+                android:textColor="#FFFFFF"
+                android:textSize="20dp" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_below="@+id/celciusTxt"
+                android:layout_alignBottom="@+id/dayTxt"
+                android:layout_alignParentBottom="true"
+                android:layout_marginLeft="0dp"
+                android:layout_marginTop="-9dp"
+                android:layout_marginBottom="9dp"
+                android:layout_alignParentRight="true"
+                android:paddingRight="20dp"
+                android:text="@{weather.currentCondition.dayNum}"
+                android:textColor="#FFFFFF"
+                android:textSize="20dp" />
+
+        </RelativeLayout>
+
+    </RelativeLayout>
+</layout>
