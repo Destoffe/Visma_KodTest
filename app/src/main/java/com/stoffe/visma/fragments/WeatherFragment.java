@@ -9,6 +9,7 @@ import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageButton;
+import android.widget.Toast;
 
 import com.stoffe.visma.MainActivity;
 import com.stoffe.visma.R;
@@ -86,16 +87,21 @@ public class WeatherFragment extends Fragment implements View.OnClickListener {
             model.select(weather);
             mBinding.setWeather(weather);
             Location loc = new Location();
-            loc.setCity(weather.loc.getCity());
-            loc.setTimeStamp(weather.currentCondition.timeStamp);
+            try {
+                loc.setCity(weather.loc.getCity());
+                loc.setTimeStamp(weather.currentCondition.timeStamp);
 
-            List<Location> location = MainActivity.hDatabase.myDao().getWeather();
-            if(location.size() > 4){
-                MainActivity.hDatabase.myDao().deleteWeater(location.get(0));
+                List<Location> location = MainActivity.hDatabase.myDao().getWeather();
+                if(location.size() > 4){
+                    MainActivity.hDatabase.myDao().deleteWeater(location.get(0));
+                }
+                Log.d("STORLEK",Integer.toString(location.size()));
+                MainActivity.hDatabase.myDao().addWeather(loc);
+                ((MainActivity) getActivity()).setViewPager(1);
+            } catch (NullPointerException e){
+                Toast.makeText(getActivity(),"Invalid City or Country!",Toast.LENGTH_SHORT).show();
             }
-            Log.d("STORLEK",Integer.toString(location.size()));
-            MainActivity.hDatabase.myDao().addWeather(loc);
-            ((MainActivity) getActivity()).setViewPager(1);
+
 
         }
     }

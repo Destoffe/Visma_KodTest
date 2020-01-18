@@ -1,6 +1,9 @@
 package com.stoffe.visma.api;
 
+import android.os.Build;
 import android.util.Log;
+
+import com.stoffe.visma.BuildConfig;
 
 import java.io.BufferedReader;
 import java.io.ByteArrayOutputStream;
@@ -10,15 +13,15 @@ import java.net.HttpURLConnection;
 import java.net.URL;
 
 public class WeatherHTTPClient {
-    private static String BASE_URL = "http://api.openweathermap.org/data/2.5/weather?q=";
+    private static String BASE_URL = BuildConfig.ApiUrl;
     private static String IMG_URL = "http://openweathermap.org/img/wn/";
-    private static String APPID = "APIKEY";
+    private static String APPID = BuildConfig.ApiKey;
     public String getWeatherData(String location) {
         HttpURLConnection con = null ;
         InputStream is = null;
 
         try {
-            con = (HttpURLConnection) ( new URL(BASE_URL + location + "&APPID=" + APPID)).openConnection();
+            con = (HttpURLConnection) ( new URL(BASE_URL+"=" + location + "&APPID=" + APPID)).openConnection();
             con.setRequestMethod("GET");
             con.setDoInput(true);
             con.setDoOutput(true);
