@@ -1,8 +1,8 @@
 package com.stoffe.visma.models;
-
-import java.text.DateFormat;
-import java.text.SimpleDateFormat;
-import java.util.Date;
+/**
+ * Modellen jag använder för ROOM för att kunna spara historik
+ * Som sagt denna är lite simplare konstruerad än Weather så lättare att hantera.
+ */
 
 import androidx.room.ColumnInfo;
 import androidx.room.Entity;
@@ -18,10 +18,8 @@ public class Location{
     private String city = "Enter City";
     private String country;
 
-    public String day;
-    public String dayNum;
+    public Location(){}
 
-    private long timeStamp;
 
     public int getId() {
         return id;
@@ -29,10 +27,6 @@ public class Location{
 
     public void setId(int id) {
         this.id = id;
-    }
-
-    public long getTimeStamp(){
-        return timeStamp;
     }
 
     public String getCity() {
@@ -49,17 +43,6 @@ public class Location{
 
     public void setCountry(String country) {
         this.country = country;
-    }
-
-    public void setTimeStamp(long timeStamp) {
-        Date date = new java.util.Date(timeStamp*1000L);
-        DateFormat df = new SimpleDateFormat("EEE");
-        DateFormat df2 = new SimpleDateFormat("dd");
-        df.setTimeZone(java.util.TimeZone.getTimeZone("GMT+1"));
-        df2.setTimeZone(java.util.TimeZone.getTimeZone("GMT+1"));
-        day = df.format(date).toUpperCase();
-        dayNum = df2.format(date);
-        this.timeStamp = timeStamp;
     }
 
 }

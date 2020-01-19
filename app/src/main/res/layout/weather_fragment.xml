@@ -30,13 +30,14 @@
             android:layout_width="56dp"
             android:layout_height="50dp"
             android:layout_alignTop="@+id/editCountry"
-            android:layout_alignParentRight="true"
-            android:layout_toRightOf="@+id/editCountry"
+            android:layout_alignParentEnd="true"
+            android:layout_toEndOf="@+id/editCountry"
             android:background="@drawable/rounded_button"
             android:textColor="#f1f1f6"
             android:src="@drawable/transparent_arrow"
             android:scaleType="fitCenter"
-            android:layout_marginLeft="2dp"
+            android:layout_marginStart="2dp"
+            android:imeOptions="actionDone"
             />
 
         <EditText
@@ -46,13 +47,14 @@
             android:layout_below="@+id/logo"
             android:layout_marginTop="20dp"
             android:background="@drawable/rounded_edit_text"
-            android:hint="ENTER CITY NAME"
+            android:hint="@string/city_hint"
             android:textColor="#92c83f"
             android:textColorHint="#92c83f"
-            android:textSize="15dp"
-            android:paddingLeft="15dp"
+            android:textSize="15sp"
+            android:paddingStart="15dp"
             android:maxLines="1"
-            android:inputType="text"
+            android:inputType="textImeMultiLine"
+            android:imeOptions="actionDone"
             />
 
         <Button
@@ -60,11 +62,11 @@
             android:layout_width="170dp"
             android:layout_height="wrap_content"
             android:layout_below="@+id/viewBtn"
-            android:layout_alignParentLeft="false"
+            android:layout_alignParentStart="false"
             android:layout_centerInParent="true"
             android:layout_marginTop="15dp"
             android:background="@drawable/rounded_history_button"
-            android:text="View History"
+            android:text="@string/view_history_btn"
             android:textColor="#FFFFFF"
             android:textAlignment="center" />
     </RelativeLayout>

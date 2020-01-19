@@ -1,5 +1,4 @@
-<layout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:tools="http://schemas.android.com/tools">
+<layout xmlns:android="http://schemas.android.com/apk/res/android">
 
     <data>
         <variable
@@ -21,16 +20,16 @@
             android:rotationY="180"
             android:scaleType="fitCenter"
             android:src="@drawable/arrow"
-            android:textColor="#f1f1f6" />
+            android:textColor="#f1f1f6"/>
 
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Weather history"
+            android:text="@string/history_title"
             android:layout_below="@id/backBtn"
             android:layout_centerHorizontal="true"
             android:textColor="@color/white"
-            android:textSize="40dp" />
+            android:textSize="40sp" />
 
         <ListView
             android:layout_width="match_parent"
@@ -39,6 +38,7 @@
             android:layout_alignParentStart="true"
             android:layout_centerVertical="true"
             android:layout_marginTop="120dp"
-            android:id="@+id/citiesList" />
+            android:id="@+id/citiesList"
+            android:divider="@null"/>
     </RelativeLayout>
 </layout>

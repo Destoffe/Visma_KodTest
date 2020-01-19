@@ -1,4 +1,8 @@
 package com.stoffe.visma.room;
+/**
+ *Room queries där jag sparar historiken. Använder Location klassen iställer för Weather
+ * då den inte gillade hur weather är konstruerad för att spara.
+ */
 
 import com.stoffe.visma.models.Location;
 
@@ -20,5 +24,7 @@ public interface WeatherDao {
 
     @Delete
     public void deleteWeater(Location location);
+
+
 
 }

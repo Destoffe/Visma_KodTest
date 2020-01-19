@@ -1,27 +1,29 @@
 package com.stoffe.visma.fragments;
-
+/**
+ * Här är fragmenten där man ser historiken.
+ * Väldigt identisk till huvudfragmenten.
+ * Som sagt vill egentligen läsa in all datan till historiken
+ * i startsidan så datan kommer in direkt och den inte ploppar upp efter 1 sekund
+ * Men i mån av tid pga skola hinner jag ej detta.
+ */
 
 import android.os.AsyncTask;
 import android.os.Bundle;
 
-import androidx.databinding.DataBindingUtil;
 import androidx.fragment.app.Fragment;
-import androidx.lifecycle.ViewModelProviders;
 
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.ArrayAdapter;
 import android.widget.ImageButton;
 import android.widget.ListView;
 
+import com.stoffe.visma.WeatherListAdapter;
 import com.stoffe.visma.api.JSONWeatherParser;
 import com.stoffe.visma.MainActivity;
 import com.stoffe.visma.R;
-import com.stoffe.visma.models.SharedViewModel;
 import com.stoffe.visma.api.WeatherHTTPClient;
-import com.stoffe.visma.databinding.FragmentViewHistoryBinding;
 import com.stoffe.visma.models.Location;
 import com.stoffe.visma.models.Weather;
 
@@ -29,84 +31,80 @@ import org.json.JSONException;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 
 
 public class ViewHistoryFragment extends Fragment implements View.OnClickListener {
-    FragmentViewHistoryBinding mBinding;
-    SharedViewModel model;
-    View view;
+    private ArrayList<Weather> testWeather;
+    private ListView list;
+    private int counter = 0;
+    private int max;
+
+    private static final String TAG = "WeatherViewFragment";
+
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        mBinding = DataBindingUtil.inflate(inflater, R.layout.fragment_view_history, container, false);
-        view = mBinding.getRoot();
-        model = ViewModelProviders.of(getActivity()).get(SharedViewModel.class);
+        Log.d(TAG,"WeatherFragment Started");
+        View view =  inflater.inflate(R.layout.view_history_fragment, container, false);
         ImageButton backBtn = view.findViewById(R.id.backBtn);
         backBtn.setOnClickListener(this);
-
         List<Location> location = MainActivity.hDatabase.myDao().getWeather();
-        ListView list = view.findViewById(R.id.citiesList);
-        ArrayList<String> cities = new ArrayList<>();
-        for(Location loc : location)
-        {
-            String city = loc.getCity();
-            cities.add(city);
+        list = view.findViewById(R.id.citiesList);
+        testWeather= new ArrayList<>();
+        max = location.size();
+        counter = 0;
+        for(Location loc : location) {
+            WeaterTask task2 = new WeaterTask();
+            task2.execute(loc.getCity());
         }
-
-        ArrayAdapter adapter = new ArrayAdapter(view.getContext(),R.layout.list_weather_layout,cities);
-        list.setAdapter(adapter);
-
-        list.setOnItemClickListener((parent, view, position, id) -> {
-            String city = location.get(position).getCity();
-            Log.d("LAND",city);
-            WeaterTask task = new WeaterTask();
-            task.execute(new String[]{city});
-        });
-
         return view;
     }
 
+    /**
+     * Samma process som i startsidan
+     */
     private class WeaterTask extends AsyncTask<String, Void, Weather> {
         @Override
         protected Weather doInBackground(String... params) {
-            Weather weather = new Weather();
-            String data = ((new WeatherHTTPClient()).getWeatherData(params[0]));
-
-            try {
-                weather = JSONWeatherParser.getWeather(data);
-                // Let's retrieve the icon
-                weather.iconData = ((new WeatherHTTPClient()).getImage(weather.currentCondition.getIcon()));
-                weather.setBitmap();
-
-            } catch (JSONException e) {
-                e.printStackTrace();
-            } catch (NullPointerException e){
-                e.printStackTrace();
-            }
+            Weather weather= new Weather();
+                String data = ((new WeatherHTTPClient()).getWeatherData(params[0]));
+                counter++;
+                for (int y = 0; y < 5; y++) {
+                    try {
+                        weather = JSONWeatherParser.getWeather(data);
+                        weather.iconData = ((new WeatherHTTPClient()).getImage(weather.currentCondition.getIcon()));
+                        weather.setBitmap();
+                        if (weather.bitmap != null) {
+                            testWeather.add(weather);
+                            break;
+                        }
+                    } catch (JSONException e) {
+                        e.printStackTrace();
+                    } catch (NullPointerException e) {
+                        e.printStackTrace();
+                    }
+                }
             return weather;
 
-        }
+            }
 
+        /**
+         * På den sista lägger vi in det i listan.
+         * @param weather
+         */
         @Override
         protected void onPostExecute(Weather weather) {
             super.onPostExecute(weather);
-            model.select(weather);
-            mBinding.setWeather(weather);
-            Location loc = new Location();
-            loc.setCity(weather.loc.getCity());
-            loc.setTimeStamp(weather.currentCondition.timeStamp);
-            ((MainActivity) getActivity()).setViewPager(1);
-
+            if(counter >= max){
+               WeatherListAdapter adapter2 = new WeatherListAdapter(Objects.requireNonNull(getActivity()),R.layout.adapter_view_layout,testWeather);
+               list.setAdapter(adapter2);
+            }
         }
     }
 
     @Override
     public void onClick(View v) {
-        ((MainActivity)getActivity()).setViewPager(0);
-
+        ((MainActivity) Objects.requireNonNull(getActivity())).replaceFragment(new WeatherFragment(),"fade");
     }
-
-
-
-
 }

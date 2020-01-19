@@ -4,4 +4,7 @@
 
     <!-- TODO: Remove or change this placeholder text -->
     <string name="hello_blank_fragment">Hello blank fragment</string>
+    <string name="history_title">Weather History</string>
+    <string name="city_hint">ENTER CITY NAME</string>
+    <string name="view_history_btn">VIEW HISTORY</string>
 </resources>

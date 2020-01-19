@@ -1,6 +1,8 @@
 package com.stoffe.visma.api;
-
-import android.util.Log;
+/*
+  JSON Parser för min data jag får från APIet
+  Lägger in det i en weather model som jag sedan tar ut i mina fragments.
+ */
 
 import com.stoffe.visma.models.Weather;
 
@@ -22,7 +24,6 @@ public class JSONWeatherParser {
 
             JSONArray jArr = jObj.getJSONArray("weather");
             JSONObject jArr2 = getObject("main", jObj);
-            Log.d("WeatheData", jArr2.toString());
 
             JSONObject JSONWeather = jArr.getJSONObject(0);
             weather.currentCondition.setDescr(getString("description", JSONWeather));
@@ -33,10 +34,8 @@ public class JSONWeatherParser {
         return null;
     }
 
-
     private static JSONObject getObject(String tagName, JSONObject jObj)  throws JSONException {
-        JSONObject subObj = jObj.getJSONObject(tagName);
-        return subObj;
+        return jObj.getJSONObject(tagName);
     }
 
     private static String getString(String tagName, JSONObject jObj) throws JSONException {

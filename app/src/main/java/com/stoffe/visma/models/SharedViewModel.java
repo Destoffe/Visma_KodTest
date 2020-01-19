@@ -1,5 +1,9 @@
 package com.stoffe.visma.models;
 
+/**
+ * Min delade data som jag för över mellan de olika fragmentsen. Inget speciellt här.
+ */
+
 import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MutableLiveData;
 import androidx.lifecycle.ViewModel;
@@ -13,5 +17,8 @@ public class SharedViewModel extends ViewModel {
     public LiveData<Weather>getSelected(){
         return selected;
     }
+
+
+
 
 }

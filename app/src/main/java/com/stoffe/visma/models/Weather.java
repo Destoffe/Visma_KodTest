@@ -1,4 +1,8 @@
 package com.stoffe.visma.models;
+/**
+ *Min main model för att ta hand om all databinding genom programmet. Sköter allt förutom stadens namn
+ * som jag har i location istället för att lättare spara i SQLLite
+ */
 
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
@@ -9,25 +13,50 @@ import java.util.Date;
 
 import androidx.room.Ignore;
 
+
 public class Weather {
 
     @Ignore
     public Location loc = new Location();
     @Ignore
     public CurrentCondition currentCondition = new CurrentCondition();
+
     @Ignore
     public byte[] iconData;
     @Ignore
     public Bitmap bitmap;
 
+    public Location getLoc() {
+        return loc;
+    }
+
+    public CurrentCondition getCurrentCondition() {
+        return currentCondition;
+    }
+
+    public Bitmap getBitmap() {
+        return bitmap;
+    }
+
     public class CurrentCondition{
-        public long timeStamp;
-        public float temp = 0;
+
+        @Ignore
+        private long timeStamp;
+        private float temp = 0;
 
         private String descr;
         private String icon;
-        public String day;
-        public String dayNum;
+
+        private String day;
+        private String dayNum;
+
+        public String getDay() {
+            return day;
+        }
+
+        public String getDayNum() {
+            return dayNum;
+        }
 
         public int getTemp() {
             return (int) Math.round((temp - 273.15));

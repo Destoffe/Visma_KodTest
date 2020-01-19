@@ -6,11 +6,8 @@ import org.junit.After;
 import org.junit.Before;
 import org.junit.Rule;
 import org.junit.Test;
-import org.junit.runner.RunWith;
-
 
 import androidx.test.rule.ActivityTestRule;
-import androidx.test.runner.AndroidJUnit4;
 
 import static junit.framework.TestCase.assertNotNull;
 
@@ -30,7 +27,7 @@ public class MainActivityTest {
     public void testLaunch(){
         View view =  mainActivity.findViewById(R.id.container);
         assertNotNull(view);
-    }
+}
 
     @After
     public void tearDown() {

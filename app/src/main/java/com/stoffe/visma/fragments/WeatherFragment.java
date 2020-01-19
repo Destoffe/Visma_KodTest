@@ -1,11 +1,18 @@
 package com.stoffe.visma.fragments;
+/*
+  Startsidans fragment. Skickar datan från denna fragmenten till resultet med LiveData.
+  Hade velar göra likadant för historiken så den kommer upp instant men i mån av tid gjorde jag ej detta.
+   Var lite jobbigt att handera bitdatan för just det.
+ */
 
+import android.content.Context;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.inputmethod.InputMethodManager;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageButton;
@@ -28,35 +35,42 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.databinding.DataBindingUtil;
 import androidx.fragment.app.Fragment;
+
 import androidx.lifecycle.ViewModelProviders;
 
 public class WeatherFragment extends Fragment implements View.OnClickListener {
     private static final String TAG = "HomeScreen";
-    WeatherFragmentBinding mBinding;
-    ImageButton viewButton;
-    SharedViewModel model;
-    EditText countryText;
-    Button historyBtn;
-    View view;
+    private WeatherFragmentBinding mBinding;
+    private SharedViewModel model;
+    private EditText countryText;
+
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         mBinding = DataBindingUtil.inflate(inflater, R.layout.weather_fragment, container, false);
-        view = mBinding.getRoot();
+        Log.d(TAG,"WeatherFragment Started");
+        View view = mBinding.getRoot();
 
+        view.getWidth();
 
         countryText= view.findViewById(R.id.editCountry);
-        viewButton = view.findViewById(R.id.viewBtn);
+        ImageButton viewButton = view.findViewById(R.id.viewBtn);
         viewButton.setOnClickListener(this);
 
-        historyBtn = view.findViewById(R.id.historyBtn);
+        Button historyBtn = view.findViewById(R.id.historyBtn);
         historyBtn.setOnClickListener(this);
-
         model = ViewModelProviders.of(getActivity()).get(SharedViewModel.class);
 
         return view;
     }
 
-
-
+    /**
+     * Läser in datan från APIN.
+     * Har en for-loop här för att en av de alla bilderna strulade och
+     * codecen klarade nästan aldrig av den på första försöken
+     * (Var någon bugg i emulatorerna enligt stackoverflow)
+     * Efter datan är inläst och bilden är gjort till en bitmap
+     * så sparar jag datan i min LiveData samt lägger in datan i min databinding
+     * När datan är klar byter jag fragment
+     */
     private class WeaterTask extends AsyncTask<String, Void, Weather> {
         @Override
         protected Weather doInBackground(String... params) {
@@ -76,11 +90,16 @@ public class WeatherFragment extends Fragment implements View.OnClickListener {
                     } catch (NullPointerException e) {
                         e.printStackTrace();
                     }
+
                 }
                     return weather;
-
         }
 
+        /**
+         * Här kollar jag även hur mycket som är i min historik. Har jag redan 5st tar jag
+         * bort den sista och lägger in den nya i min databas.
+         * @param weather Tar in vädret från tasken och sparar den i sql
+         */
         @Override
         protected void onPostExecute(Weather weather) {
             super.onPostExecute(weather);
@@ -89,41 +108,43 @@ public class WeatherFragment extends Fragment implements View.OnClickListener {
             Location loc = new Location();
             try {
                 loc.setCity(weather.loc.getCity());
-                loc.setTimeStamp(weather.currentCondition.timeStamp);
 
                 List<Location> location = MainActivity.hDatabase.myDao().getWeather();
                 if(location.size() > 4){
                     MainActivity.hDatabase.myDao().deleteWeater(location.get(0));
                 }
-                Log.d("STORLEK",Integer.toString(location.size()));
                 MainActivity.hDatabase.myDao().addWeather(loc);
-                ((MainActivity) getActivity()).setViewPager(1);
+                ((MainActivity)getActivity()).replaceFragment(new WeatherViewFragment(),"slide");
             } catch (NullPointerException e){
                 Toast.makeText(getActivity(),"Invalid City or Country!",Toast.LENGTH_SHORT).show();
+                e.printStackTrace();
             }
-
-
         }
     }
 
     @Override
     public void onClick(View v) {
-
         switch(v.getId()) {
             case R.id.viewBtn:
-                Log.d("Knappl","knapp1");
                 String city = countryText.getText().toString();
-                if (city != null && !city.isEmpty()) {
-                    Log.d("NOTNULL", city);
+                if (!city.isEmpty()) {
+                    hideKeyboard(getContext());
                     WeaterTask task = new WeaterTask();
-                    task.execute(new String[]{city});
+                    task.execute(city);
                 }
                 break;
 
             case R.id.historyBtn:
-                Log.d("Knappl","knapp2");
-                ((MainActivity) getActivity()).setViewPager(2);
+
+                ((MainActivity)getActivity()).replaceFragment(new ViewHistoryFragment(),"fade");
                 break;
         }
+    }
+
+    private void hideKeyboard(Context mContext) {
+        InputMethodManager imm = (InputMethodManager) mContext
+                .getSystemService(Context.INPUT_METHOD_SERVICE);
+        imm.hideSoftInputFromWindow(((MainActivity) mContext).getWindow()
+                .getCurrentFocus().getWindowToken(), 0);
     }
 }
